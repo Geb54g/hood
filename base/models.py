@@ -1,66 +1,47 @@
 from django.db import models
 from django.contrib.auth.models import User
-from cloudinary.models import CloudinaryField
-from pyuploadcare.dj.models import ImageField
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.utils import timezone
 
 
-class NeighbourHood(models.Model):
-    name = models.CharField(max_length=50)
-    location = models.CharField(max_length=60)
-    admin = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name='hood')
-    hood_logo =  CloudinaryField('profile_photos/', default='profile_photos/user')
-    description = models.TextField()
-    health_info = models.IntegerField(null=True, blank=True)
-    health_officer = models.CharField(max_length=60, null=True, blank=True)
-    police_info = models.IntegerField(null=True, blank=True)
-    police_officer = models.CharField(max_length=60, null=True, blank=True)
+class Neighbourhood(models.Model):
+    name=models.CharField(max_length=60)
+    location=models.CharField(max_length=60)
+    population=models.IntegerField()
+    image = models.ImageField(upload_to = 'images/')
 
-    def __str__(self):
-        return f'{self.name} hood'
-
-    def create_neighborhood(self):
+    def create_neigborhood(self):
         self.save()
 
-    def delete_neighborhood(self):
+    def delete_neigborhood(self):
         self.delete()
 
     @classmethod
-    def find_neighborhood(cls, neighborhood_id):
-        return cls.objects.filter(id=neighborhood_id)
+    def search_by_name(cls,search_term):
+        neighborhood=cls.objects.filter(name__icontains=search_term)
+        return neighborhood
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    name = models.CharField(max_length=80, blank=True)
-    bio = models.TextField(max_length=254, blank=True)
-    profile_picture = CloudinaryField('profile_photos/', default='profile_photos/user')
-    location = models.CharField(max_length=50, blank=True, null=True)
-    neighbourhood = models.ForeignKey(NeighbourHood, on_delete=models.SET_NULL, null=True, related_name='members', blank=True)
+    image=models.ImageField(default='default.jpg', upload_to='profile_pics')
+    bio=models.CharField(max_length=300)
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user.username} profile'
+        return f'{self.user.username} Profile'
 
-    @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
+    def create_profile(self):
+        self.save()
 
-    @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+    def delete_profile(self):
+        self.delete()
 
 
 class Business(models.Model):
-    name = models.CharField(max_length=120)
-    email = models.EmailField(max_length=254)
-    description = models.TextField(blank=True)
-    neighbourhood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, related_name='business')
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='owner')
-
-    def __str__(self):
-        return f'{self.name} Business'
+    name=models.CharField(max_length=60)
+    description=models.CharField(max_length=200)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    neighborhood=models.ForeignKey(Neighbourhood,on_delete=models.CASCADE)
+    email=models.EmailField()
 
     def create_business(self):
         self.save()
@@ -68,15 +49,7 @@ class Business(models.Model):
     def delete_business(self):
         self.delete()
 
-    @classmethod
-    def search_business(cls, name):
-        return cls.objects.filter(name__icontains=name).all()
-
-
 class Post(models.Model):
-    title = models.CharField(max_length=120, null=True)
-    post = models.TextField()
-    date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='post_owner')
-    hood = models.ForeignKey(NeighbourHood, on_delete=models.CASCADE, related_name='hood_post')
-
+    post=models.CharField(max_length=200)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    neighborhood=models.ForeignKey(Neighbourhood,on_delete=models.CASCADE)
