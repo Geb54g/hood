@@ -1,18 +1,18 @@
-from django.urls import path, include
+from django.conf.urls import url
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
-urlpatterns = [
-    path('', views.index, name='index'),
-    path('register/', views.signup, name='signup'),
-    path('account/', include('django.contrib.auth.urls')),
-    path('all-hoods/', views.hoods, name='hood'),
-    path('new-hood/', views.create_hood, name='new-hood'),
-    path('profile/<username>', views.profile, name='profile'),
-    path('profile/<username>/edit/', views.edit_profile, name='edit-profile'),
-    path('join_hood/<id>', views.join_hood, name='join-hood'),
-    path('leave_hood/<id>', views.leave_hood, name='leave-hood'),
-    path('single_hood/<hood_id>', views.single_hood, name='single-hood'),
-    path('<hood_id>/new-post', views.create_post, name='post'),
-    path('<hood_id>/members', views.hood_members, name='members'),
-    path('search/', views.search_business, name='search'),
+urlpatterns=[
+    url('^$',views.home,name = 'home'),
+    url(r'^profile/', views.profile, name='profile'),
+    url('^neighbourhood', views.neighbourhood, name='neighbourhood'),
+    url('^addneighbourhood',views.addneighbourhood,name="addneighbourhood"),
+    url(r'^detail/(?P<neighbourhood_id>\d+)/$' , views.neighbourhood_details, name='detail' ),
+    url(r'^new_business/(?P<pk>\d+)$',views.new_business,name='new_business'),
+    url(r'^new_post/(?P<pk>\d+)$',views.new_post,name='new_post'),
+    url(r'^search/',views.search_hoods,name='search_hoods'),
 ]
+
+if settings.DEBUG:
+    urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
