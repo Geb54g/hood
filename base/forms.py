@@ -1,37 +1,37 @@
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile, NeighbourHood, Business, Post
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from .models import *
 
+class UserRegisterForm(UserCreationForm):
+   email = forms.EmailField(max_length=200, help_text = 'Required')
+   class Meta:
+       model = User
+       fields = ['username', 'email', 'password1', 'password2']
 
-
-class SignupForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ['username', 'email']
 
+class ProfileUpdateForm(forms.ModelForm):
 
-class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        exclude = ('user', 'neighbourhood')
+        fields = ['image','bio']
 
-
-class NeighbourHoodForm(forms.ModelForm):
+class NeighbourhoodForm(forms.ModelForm):
     class Meta:
-        model = NeighbourHood
-        exclude = ('admin',)
+        model=Neighbourhood
+        fields = ['name','location','population','image']
 
-
-class BusinessForm(forms.ModelForm):
+class NewBusinessForm(forms.ModelForm):
     class Meta:
         model = Business
-        exclude = ('user', 'neighbourhood')
-
-
-class PostForm(forms.ModelForm):
+        fields=['name','description','email']
+class NewPostForm(forms.ModelForm):
     class Meta:
-        model = Post
-        exclude = ('user', 'hood')
+        model=Post
+        fields=['post']
