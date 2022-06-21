@@ -1,13 +1,22 @@
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
-
-urlpatterns=[
-  path('',views.home_page,name='home_page'),
-  path('join/hood/<hood_id>',views.join_hood,name='join_hood'),
-  path('hood/emergency-services',views.e_services,name='e_services'),
-  path('hood/businesses',views.hood_bs,name='hood_bs'),
-  path('hood/posts',views.hood_posts,name='hood_posts'),
-  path('hood/myprofile',views.my_profile,name='my_profile'),
-  path('hood/search/business',views.search_business,name='search_business')
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('register/', views.signup, name='signup'),
+    path('account/', include('django.contrib.auth.urls')),
+    path('all-hoods/', views.hoods, name='hood'),
+    path('new-hood/', views.create_hood, name='new-hood'),
+    path('profile/<username>', views.profile, name='profile'),
+    path('profile/<username>/edit/', views.edit_profile, name='edit-profile'),
+    path('join_hood/<id>', views.join_hood, name='join-hood'),
+    path('leave_hood/<id>', views.leave_hood, name='leave-hood'),
+    path('single_hood/<hood_id>', views.single_hood, name='single-hood'),
+    path('<hood_id>/new-post', views.create_post, name='post'),
+    path('<hood_id>/members', views.hood_members, name='members'),
+    path('search/', views.search_business, name='search'),
 ]
+if settings.DEBUG:
+    urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
