@@ -1,75 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
+{%load static%}
+{% block styles%}
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+{% endblock styles%}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/css/mdb.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Design Bootstrap -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/css/mdb.min.css" rel="stylesheet">
-</head>
-
-<body>
-    <!--Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark primary-color">
-
-        <!-- Navbar brand -->
-        <a class="navbar-brand" href="{% url 'home' %}">Neighbourhood</a>
-
-        <!-- Collapse button -->
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
-            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Collapsible content -->
-        <div class="collapse navbar-collapse" id="basicExampleNav">
-
-            <!-- Links -->
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'home' %}">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'addneighbourhood' %}">Add New Neighbourhood</a>
-                </li>
-
-                <!-- Dropdown -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Others</a>
-                    <div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/profile"">Profile Page</a>
-          <a class=" dropdown-item" href="/accounts/login/">Log Out</a>
-                    </div>
-                </li>
-
-            </ul>
-            <!-- Links -->
-
-            <form class="form-inline">
-                <div class="input-group search">
-                    <input type="text" class="form-control" placeholder="Search by neighborhood name" name="search"
-                        style="max-width:215px; height: 28px; background-color:rgb(250, 250, 250);line-height: 38px; text-align: center;">
-                </div>
-            </form>
+<nav class="mb-1 navbar navbar-expand-lg navbar-light ">
+  <a class="navbar-brand" href="{%url 'home_page'%}">Hood Watch</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-555"
+    aria-controls="navbarSupportedContent-555" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div style="width: 100;" class="collapse navbar-collapse" id="navbarSupportedContent-555">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+      <form action="{% url 'search_business' %}" class="form-inline mr-auto my-1">
+        <div class="md-form form-sm my-0">
+          <input class="form-control form-control-sm mr-sm-2 mb-0" name="bs_name" id="bs_name" type="text" placeholder="Search Business"
+            aria-label="Search">
         </div>
-        <!-- Collapsible content -->
-
-    </nav>
-    <!--/.Navbar-->
-</body>
-
-</html>
+      </form>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+    
+      <li class="nav-item ">
+        <a class="nav-link" href="{%url 'home_page'%}"><i class="fas fa-home"></i>Home
+        </a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{%url 'e_services'%}"><i class="fas fa-hospital"></i>E-Services
+        </a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{%url 'hood_bs'%}"><i class="fas fa-briefcase"></i>Businesses
+        </a>
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="{%url 'hood_posts'%}"><i class="far fa-comments"></i>Forum
+        </a>
+      </li>
+      <li class="nav-item avatar dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+         {%if request.user.profile.profile_photo.cdn_url%}
+         <img src="{{request.user.profile.profile_photo.cdn_url}}" width="28px" height="28px" alt="avatar image" class="rounded-circle z-depth-0"/>
+         {%else%}
+         <img src="https://www.iconfinder.com/data/icons/user-pictures/100/unknown-512.png" class="rounded-circle z-depth-0"
+         alt="avatar image" width="28px" height="28px" >
+         {%endif%}
+     
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg-right text-center dropdown-secondary"
+          aria-labelledby="navbarDropdownMenuLink-55">
+          <a class="dropdown-item" href="{%url 'my_profile'%}">Profile</a>
+          <a class="dropdown-item" href="{%url 'my_profile'%}">Edit Profile</a>
+          <a class="dropdown-item" href="/logout">LOGOUT</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
