@@ -1,7 +1,7 @@
-"""hoodwatch URL Configuration
+"""base URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
+    https://docs.djangoproject.com/en/4.0/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -15,15 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.urls.conf import include
-from base import views as base_views
-from users import views as user_views
 
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+# ]
+
+
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('base.urls')),
-    path('accounts/register',user_views.register_user,name='register_user'),
-    path('accounts/login',user_views.user_login,name='user_login'),
-    path('logout', user_views.user_logout, name='user_logout'),
+    path('', include('base.urls'))
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
