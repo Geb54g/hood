@@ -1,37 +1,21 @@
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django import forms
-from .models import *
 
-class UserRegisterForm(UserCreationForm):
-   email = forms.EmailField(max_length=200, help_text = 'Required')
-   class Meta:
-       model = User
-       fields = ['username', 'email', 'password1', 'password2']
 
-class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-
+class SignUpForm(UserCreationForm):
+    first_name = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
+                                                               "placeholder":"First Name"}))
+    last_name = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
+                                                               "placeholder":"Last Name"}))
+    username = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
+                                                               "placeholder":"Username"}))
+    email = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
+                                                               "placeholder":"Email"}))
+    password1 = forms.CharField(label=False, widget=forms.PasswordInput(attrs={"class":"form-control",
+                                                               "placeholder":"Password"}))
+    password2 = forms.CharField(label=False, widget=forms.PasswordInput(attrs={"class":"form-control",
+                                                               "placeholder":"Confirm Password"}))
     class Meta:
         model = User
-        fields = ['username', 'email']
-
-class ProfileUpdateForm(forms.ModelForm):
-
-    class Meta:
-        model = Profile
-        fields = ['image','bio']
-
-class NeighbourhoodForm(forms.ModelForm):
-    class Meta:
-        model=Neighbourhood
-        fields = ['name','location','population','image']
-
-class NewBusinessForm(forms.ModelForm):
-    class Meta:
-        model = Business
-        fields=['name','description','email']
-class NewPostForm(forms.ModelForm):
-    class Meta:
-        model=Post
-        fields=['post']
+        fields = ('username', 'first_name', 'last_name','email', 'password1', 'password2',)
