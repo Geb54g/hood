@@ -30,7 +30,7 @@ def profile(request):
             u_form.save()
             p_form.save()
             # message.success(request, f'Your account has been updated')
-            return render(request,'registration/profile.html')
+            return render(request,'profile.html')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -41,7 +41,7 @@ def profile(request):
         'p_form':p_form
     }
 
-    return render(request, 'registration/profile.html',locals())
+    return render(request, 'profile.html',locals())
 
 
 @login_required(login_url='/accounts/login/')

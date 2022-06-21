@@ -15,7 +15,7 @@ import os
 import cloudinary
 import django_on_heroku
 import dj_database_url
-from decouple import config
+from decouple import config,Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,9 +45,10 @@ INSTALLED_APPS = [
     'cloudinary',
     'crispy_forms',
     'base',
+    'bootstrap4'
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -126,20 +127,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+LOGIN_REDIRECT_URL = "home"
+LOGIN_URL = 'login'
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = 'index'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
-LOGOUT_REDIRECT_URL = 'index'
+# django_heroku.settings(locals())
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
