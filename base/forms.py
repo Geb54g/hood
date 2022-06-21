@@ -1,21 +1,38 @@
+
 from django import forms
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Profile, NeighbourHood, Business, Post
+from cloudinary.models import CloudinaryField
 
 
-class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
-                                                               "placeholder":"First Name"}))
-    last_name = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
-                                                               "placeholder":"Last Name"}))
-    username = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
-                                                               "placeholder":"Username"}))
-    email = forms.CharField(label=False, widget=forms.TextInput(attrs={"class":"form-control",
-                                                               "placeholder":"Email"}))
-    password1 = forms.CharField(label=False, widget=forms.PasswordInput(attrs={"class":"form-control",
-                                                               "placeholder":"Password"}))
-    password2 = forms.CharField(label=False, widget=forms.PasswordInput(attrs={"class":"form-control",
-                                                               "placeholder":"Confirm Password"}))
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name','email', 'password1', 'password2',)
+        fields = ('username', 'email', 'password1', 'password2')
+
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        exclude = ('user', 'neighbourhood')
+
+class NeighbourHoodForm(forms.ModelForm):
+    class Meta:
+        model = NeighbourHood
+        exclude = ('admin',)
+
+
+class BusinessForm(forms.ModelForm):
+    class Meta:
+        model = Business
+        exclude = ('user', 'neighbourhood')
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ('user', 'hood')
+
+
+
